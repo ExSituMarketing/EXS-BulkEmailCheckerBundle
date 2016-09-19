@@ -14,6 +14,11 @@ class BulkEmailCheckerManager
     /**
      * @var string
      */
+    private $enabled;
+
+    /**
+     * @var string
+     */
     private $apiKey;
 
     /**
@@ -24,13 +29,13 @@ class BulkEmailCheckerManager
     /**
      * BulkEmailCheckerManager constructor.
      *
-     * @param string $apiKey
-     * @param string $apiUrl
+     * @param array $config
      */
-    public function __construct($apiKey, $apiUrl)
+    public function __construct(array $config)
     {
-        $this->apiKey = $apiKey;
-        $this->apiUrl = $apiUrl;
+        $this->enabled = isset($config['enabled']) ? (bool) $config['enabled'] : false;
+        $this->apiKey = isset($config['api_key']) ? (string) $config['api_key'] : '';
+        $this->apiUrl = isset($config['api_url']) ? (string) $config['api_url'] : '';
     }
 
     /**
@@ -40,6 +45,10 @@ class BulkEmailCheckerManager
      */
     public function validate($email)
     {
+        if (true !== $this->enabled) {
+            return true;
+        }
+
         $ch = curl_init($this->getUrl($email));
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 15);

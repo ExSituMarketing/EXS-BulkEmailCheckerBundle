@@ -2,8 +2,7 @@ services:
     exs_bulk_email_checker.bulk_email_checker_manager:
         class: 'EXS\BulkEmailCheckerBundle\Services\BulkEmailCheckerManager'
         arguments:
-            - '%exs_bulk_email_checker.api_key%'
-            - '%exs_bulk_email_checker.api_url%'
+            - '%exs_bulk_email_checker.config%'
 
     exs_bulk_email_checker.bulk_email_checker_validator:
         class: 'EXS\BulkEmailCheckerBundle\Validator\Constraints\BulkEmailCheckerValidator'

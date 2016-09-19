@@ -44,10 +44,11 @@ namespace EXS\BulkEmailCheckerBundle\Tests\Services {
          */
         protected function setUp()
         {
-            $this->manager = new BulkEmailCheckerManager(
-                'Foo123Bar456',
-                'http://api-v4.bulkemailchecker2.com/?key=%api_key%&email=%email%'
-            );
+            $this->manager = new BulkEmailCheckerManager([
+                'enabled' => true,
+                'api_key' => 'Foo123Bar456',
+                'api_url' => 'http://api-v4.bulkemailchecker2.com/?key=%api_key%&email=%email%'
+            ]);
         }
 
         public function testValidateValidEmail()
@@ -93,7 +94,11 @@ namespace EXS\BulkEmailCheckerBundle\Tests\Services {
             $url = $method->invokeArgs($this->manager, ['foo@bar.baz']);
             $this->assertEquals('http://api-v4.bulkemailchecker2.com/?key=Foo123Bar456&email=foo@bar.baz', $url);
 
-            $this->manager = new BulkEmailCheckerManager('somestring', 'thisisnotavalidurl');
+            $this->manager = new BulkEmailCheckerManager([
+                'enabled' => true,
+                'api_key' => 'Foo123Bar456',
+                'api_url' => 'thisisnotavalidurl'
+            ]);
 
             $method->invokeArgs($this->manager, ['foo@bar.baz']);
         }

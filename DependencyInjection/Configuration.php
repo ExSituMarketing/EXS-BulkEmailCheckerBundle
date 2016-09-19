@@ -30,7 +30,7 @@ class Configuration implements ConfigurationInterface
                     ->cannotBeEmpty()
                 ->end()
                 ->scalarNode('api_url')
-                    ->defaultValue('http://api-v4.bulkemailchecker2.com/?key=%api_key%&email=%email%')
+                    ->defaultValue('http://api-v4.bulkemailchecker2.com/?key=#api_key#&email=#email#')
                 ->end()
             ->end()
         ;

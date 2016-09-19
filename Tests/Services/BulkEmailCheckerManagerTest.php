@@ -47,7 +47,7 @@ namespace EXS\BulkEmailCheckerBundle\Tests\Services {
             $this->manager = new BulkEmailCheckerManager([
                 'enabled' => true,
                 'api_key' => 'Foo123Bar456',
-                'api_url' => 'http://api-v4.bulkemailchecker2.com/?key=%api_key%&email=%email%'
+                'api_url' => 'http://api-v4.bulkemailchecker2.com/?key=#api_key#&email=#email#'
             ]);
         }
 

@@ -73,15 +73,15 @@ class BulkEmailCheckerManager
     private function getUrl($email)
     {
         if (
-            (false === strpos($this->apiUrl, '%api_key%'))
-            || (false === strpos($this->apiUrl, '%email%'))
+            (false === strpos($this->apiUrl, '#api_key#'))
+            || (false === strpos($this->apiUrl, '#email#'))
         ) {
-            throw new InvalidConfigurationException('Api url must contains "%api_key%" and "%email%" place holders.');
+            throw new InvalidConfigurationException('Api url must contains "#api_key#" and "#email#" place holders.');
         }
 
         return strtr($this->apiUrl, [
-            '%api_key%' => $this->apiKey,
-            '%email%' => $email,
+            '#api_key#' => $this->apiKey,
+            '#email#' => $email,
         ]);
     }
 }

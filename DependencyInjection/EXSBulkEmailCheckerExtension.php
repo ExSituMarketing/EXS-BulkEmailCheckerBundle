@@ -25,8 +25,6 @@ class EXSBulkEmailCheckerExtension extends Extension
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');
 
-        var_dump($config);
-
         $container->setParameter('exs_bulk_email_checker.config', $config);
     }
 }

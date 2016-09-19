@@ -1,0 +1,35 @@
+{
+    "name": "exs/bulk-email-checker-bundle",
+    "type": "symfony-bundle",
+    "description": "This bundle provides an email validation through 'Bulk Email Checker' api.",
+    "keywords": ["Symfony2", "bundle", "email", "validation"],
+    "homepage": "https://github.com/ExSituMarketing/EXS-BulkEmailCheckerBundle",
+    "license": "MIT",
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "authors": [
+        {
+            "name": "Ex-Situ Marketing",
+            "email": "dev@ex-situ.com"
+        }
+    ],
+    "require": {
+        "php": "~5.4|~7.0",
+        "symfony/framework-bundle": "~2.8|~3.0",
+        "symfony/validator": "~2.8|~3.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "~4.8"
+    },
+    "autoload": {
+        "psr-4": { "EXS\\BulkEmailCheckerBundle\\": "" }
+    },
+    "config": {
+        "bin-dir": "bin"
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "master"
+        }
+    }
+}

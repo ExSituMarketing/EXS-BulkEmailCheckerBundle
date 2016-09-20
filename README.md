@@ -1,5 +1,7 @@
 # EXS-BulkEmailCheckerBundle
 
+[![Build Status](https://travis-ci.org/ExSituMarketing/EXS-BulkEmailCheckerBundle.svg?branch=master)](https://travis-ci.org/ExSituMarketing/EXS-BulkEmailCheckerBundle)
+
 ## Installation
 
 Download the bundle using composer

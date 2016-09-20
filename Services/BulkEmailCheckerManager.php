@@ -12,9 +12,14 @@ use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 class BulkEmailCheckerManager
 {
     /**
-     * @var string
+     * @var bool
      */
     private $enabled;
+
+    /**
+     * @var bool
+     */
+    private $passOnError;
 
     /**
      * @var string
@@ -34,6 +39,7 @@ class BulkEmailCheckerManager
     public function __construct(array $config)
     {
         $this->enabled = isset($config['enabled']) ? (bool) $config['enabled'] : false;
+        $this->passOnError = isset($config['pass_on_error']) ? (bool) $config['pass_on_error'] : true;
         $this->apiKey = isset($config['api_key']) ? (string) $config['api_key'] : '';
         $this->apiUrl = isset($config['api_url']) ? (string) $config['api_url'] : '';
     }
@@ -53,13 +59,17 @@ class BulkEmailCheckerManager
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 15);
         curl_setopt($ch, CURLOPT_TIMEOUT, 15);
-        $response = curl_exec($ch);
+        $rawResponse = curl_exec($ch);
         curl_close($ch);
 
-        $json = json_decode($response, true);
+        $response = json_decode($rawResponse, true);
 
-        if (isset($json['status'])) {
-            return ('passed' === strtolower($json['status']));
+        if (isset($response['status'])) {
+            return ('passed' === strtolower($response['status']));
+        }
+
+        if (isset($response['error'])) {
+            return $this->passOnError;
         }
 
         return false;

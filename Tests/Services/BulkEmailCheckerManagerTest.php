@@ -46,6 +46,7 @@ namespace EXS\BulkEmailCheckerBundle\Tests\Services {
         {
             $this->manager = new BulkEmailCheckerManager([
                 'enabled' => true,
+                'pass_on_error' => true,
                 'api_key' => 'Foo123Bar456',
                 'api_url' => 'http://api-v4.bulkemailchecker2.com/?key=#api_key#&email=#email#'
             ]);
@@ -73,6 +74,24 @@ namespace EXS\BulkEmailCheckerBundle\Tests\Services {
             $this->assertFalse($this->manager->validate('foo@bar'));
         }
 
+        public function testValidateWithError()
+        {
+            global $curlResult;
+
+            $curlResult = json_encode([
+                'error' => 'There are no validations on the account to verify an email address.',
+            ]);
+
+            $this->assertTrue($this->manager->validate('foo@bar'));
+
+            $reflectedManager = new \ReflectionClass($this->manager);
+            $reflectedProperty = $reflectedManager->getProperty('passOnError');
+            $reflectedProperty->setAccessible(true);
+            $reflectedProperty->setValue($this->manager, false);
+
+            $this->assertFalse($this->manager->validate('foo@bar'));
+        }
+
         public function testValidateBadResponse()
         {
             global $curlResult;
@@ -84,8 +103,9 @@ namespace EXS\BulkEmailCheckerBundle\Tests\Services {
 
         /**
          * @expectedException Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
+         * @expectedExceptionMessage Api url must contains "#api_key#" and "#email#" place holders.
          */
-        public function testGetUrlValid()
+        public function testGetUrl()
         {
             $reflection = new \ReflectionClass($this->manager);
             $method = $reflection->getMethod('getUrl');
@@ -94,11 +114,10 @@ namespace EXS\BulkEmailCheckerBundle\Tests\Services {
             $url = $method->invokeArgs($this->manager, ['foo@bar.baz']);
             $this->assertEquals('http://api-v4.bulkemailchecker2.com/?key=Foo123Bar456&email=foo@bar.baz', $url);
 
-            $this->manager = new BulkEmailCheckerManager([
-                'enabled' => true,
-                'api_key' => 'Foo123Bar456',
-                'api_url' => 'thisisnotavalidurl'
-            ]);
+            $reflectedManager = new \ReflectionClass($this->manager);
+            $reflectedProperty = $reflectedManager->getProperty('apiUrl');
+            $reflectedProperty->setAccessible(true);
+            $reflectedProperty->setValue($this->manager, 'thisisnotavalidurl');
 
             $method->invokeArgs($this->manager, ['foo@bar.baz']);
         }

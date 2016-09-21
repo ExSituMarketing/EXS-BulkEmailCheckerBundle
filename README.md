@@ -12,7 +12,7 @@ $ composer require exs/bulk-email-checker-bundle
 
 Enable the bundle
 
-```
+```php
 <?php
 // app/AppKernel.php
 

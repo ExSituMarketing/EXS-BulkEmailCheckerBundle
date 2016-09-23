@@ -40,7 +40,6 @@ class BulkEmailCheckerValidator extends ConstraintValidator
                 ->setParameter('%value%', $value)
                 ->addViolation()
             ;
-
         }
     }
 }

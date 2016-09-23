@@ -52,7 +52,7 @@ namespace EXS\BulkEmailCheckerBundle\Tests\Services {
             ]);
         }
 
-        public function testValidateValidEmail()
+        public function testValidate()
         {
             global $curlResult;
 
@@ -61,22 +61,12 @@ namespace EXS\BulkEmailCheckerBundle\Tests\Services {
             ]);
 
             $this->assertTrue($this->manager->validate('foo@bar.baz'));
-        }
-
-        public function testValidateInvalidEmail()
-        {
-            global $curlResult;
 
             $curlResult = json_encode([
                 'status' => 'failed',
             ]);
 
             $this->assertFalse($this->manager->validate('foo@bar'));
-        }
-
-        public function testValidateWithError()
-        {
-            global $curlResult;
 
             $curlResult = json_encode([
                 'error' => 'There are no validations on the account to verify an email address.',
@@ -85,20 +75,22 @@ namespace EXS\BulkEmailCheckerBundle\Tests\Services {
             $this->assertTrue($this->manager->validate('foo@bar'));
 
             $reflectedManager = new \ReflectionClass($this->manager);
+
             $reflectedProperty = $reflectedManager->getProperty('passOnError');
             $reflectedProperty->setAccessible(true);
             $reflectedProperty->setValue($this->manager, false);
 
             $this->assertFalse($this->manager->validate('foo@bar'));
-        }
-
-        public function testValidateBadResponse()
-        {
-            global $curlResult;
 
             $curlResult = json_encode([]);
 
             $this->assertFalse($this->manager->validate('foo@bar'));
+
+            $reflectedProperty = $reflectedManager->getProperty('enabled');
+            $reflectedProperty->setAccessible(true);
+            $reflectedProperty->setValue($this->manager, false);
+
+            $this->assertTrue($this->manager->validate('foo@bar'));
         }
 
         /**

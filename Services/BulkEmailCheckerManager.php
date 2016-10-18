@@ -51,7 +51,10 @@ class BulkEmailCheckerManager
      */
     public function validate($email)
     {
-        if (true !== $this->enabled) {
+        if (
+            (true !== $this->enabled)
+            || empty($email)
+        ) {
             return true;
         }
 

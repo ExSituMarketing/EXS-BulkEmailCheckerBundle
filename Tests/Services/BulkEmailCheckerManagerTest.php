@@ -91,6 +91,12 @@ namespace EXS\BulkEmailCheckerBundle\Tests\Services {
             $reflectedProperty->setValue($this->manager, false);
 
             $this->assertTrue($this->manager->validate('foo@bar'));
+
+            $curlResult = json_encode([
+                'status' => 'failed',
+            ]);
+
+            $this->assertTrue($this->manager->validate(''));
         }
 
         /**

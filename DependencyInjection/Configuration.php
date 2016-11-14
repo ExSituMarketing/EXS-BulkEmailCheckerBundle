@@ -35,6 +35,12 @@ class Configuration implements ConfigurationInterface
                 ->scalarNode('api_url')
                     ->defaultValue('http://api-v4.bulkemailchecker2.com/?key=#api_key#&email=#email#')
                 ->end()
+                ->arrayNode('whitelisted_domains')
+                    ->prototype('scalar')->end()
+                ->end()
+                ->arrayNode('blacklisted_domains')
+                    ->prototype('scalar')->end()
+                ->end()
             ->end()
         ;
 

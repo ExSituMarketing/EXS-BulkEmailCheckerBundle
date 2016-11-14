@@ -32,6 +32,16 @@ class BulkEmailCheckerManager
     private $apiUrl;
 
     /**
+     * @var array
+     */
+    private $whitelistedDomains;
+
+    /**
+     * @var array
+     */
+    private $blacklistedDomains;
+
+    /**
      * BulkEmailCheckerManager constructor.
      *
      * @param array $config
@@ -42,6 +52,8 @@ class BulkEmailCheckerManager
         $this->passOnError = isset($config['pass_on_error']) ? (bool) $config['pass_on_error'] : true;
         $this->apiKey = isset($config['api_key']) ? (string) $config['api_key'] : '';
         $this->apiUrl = isset($config['api_url']) ? (string) $config['api_url'] : '';
+        $this->whitelistedDomains = isset($config['whitelisted_domains']) ? $config['whitelisted_domains'] : array();
+        $this->blacklistedDomains = isset($config['blacklisted_domains']) ? $config['blacklisted_domains'] : array();
     }
 
     /**
@@ -56,6 +68,22 @@ class BulkEmailCheckerManager
             || empty($email)
         ) {
             return true;
+        }
+
+        $emailElements = explode('@', $email);
+
+        if (
+            isset($emailElements[1])
+            && in_array($emailElements[1], $this->whitelistedDomains)
+        ) {
+            return true;
+        }
+
+        if (
+            isset($emailElements[1])
+            && in_array($emailElements[1], $this->blacklistedDomains)
+        ) {
+            return false;
         }
 
         $ch = curl_init($this->getUrl($email));

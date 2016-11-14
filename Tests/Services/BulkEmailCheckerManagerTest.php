@@ -48,13 +48,19 @@ namespace EXS\BulkEmailCheckerBundle\Tests\Services {
                 'enabled' => true,
                 'pass_on_error' => true,
                 'api_key' => 'Foo123Bar456',
-                'api_url' => 'http://api-v4.bulkemailchecker2.com/?key=#api_key#&email=#email#'
+                'api_url' => 'http://api-v4.bulkemailchecker2.com/?key=#api_key#&email=#email#',
+                'whitelisted_domains' => ['whitelisted.tld'],
+                'blacklisted_domains' => ['blacklisted.tld'],
             ]);
         }
 
         public function testValidate()
         {
             global $curlResult;
+
+            $this->assertTrue($this->manager->validate('foo@whitelisted.tld'));
+
+            $this->assertFalse($this->manager->validate('foo@blacklisted.tld'));
 
             $curlResult = json_encode([
                 'status' => 'passed',

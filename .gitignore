@@ -1,8 +1,6 @@
 phpunit.xml
-.directory
 vendor
 composer.phar
 composer.lock
 bin
-.idea
 Tests/Coverage

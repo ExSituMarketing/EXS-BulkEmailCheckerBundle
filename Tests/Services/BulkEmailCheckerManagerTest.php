@@ -2,18 +2,27 @@
 
 namespace {
     /**
-     * Variable published in the global namespace to be shareable by the tested service and the test class.
-     *
+     * Variables published in the global namespace to be shareable by the tested service and the test class.
+     */
+
+    /**
      * @var string|null
      */
     $curlResult = null;
+
+    /**
+     * @var bool|null
+     */
+    $checkdnsrrResult = null;
 }
 
 namespace EXS\BulkEmailCheckerBundle\Services {
     /**
-     * Mock the native function to avoid the actual curl_exec call in test.
+     * Mock the natives functions to avoid the actual calls in test.
      * Must be in the same namespace as the tested method.
-     *
+     */
+
+    /**
      * {@inheritdoc}
      */
     function curl_exec($ch)
@@ -21,6 +30,16 @@ namespace EXS\BulkEmailCheckerBundle\Services {
         global $curlResult;
 
         return $curlResult ?: \curl_exec($ch);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    function checkdnsrr($host, $type = 'MX')
+    {
+        global $checkdnsrrResult;
+
+        return $checkdnsrrResult ?: \checkdnsrr($host, $type);
     }
 }
 
@@ -57,6 +76,7 @@ namespace EXS\BulkEmailCheckerBundle\Tests\Services {
         public function testValidate()
         {
             global $curlResult;
+            global $checkdnsrrResult;
 
             $this->assertTrue($this->manager->validate('foo@whitelisted.tld'));
 
@@ -98,11 +118,24 @@ namespace EXS\BulkEmailCheckerBundle\Tests\Services {
 
             $this->assertTrue($this->manager->validate('foo@bar'));
 
-            $curlResult = json_encode([
-                'status' => 'failed',
-            ]);
+            $reflectedProperty->setValue($this->manager, true);
 
             $this->assertTrue($this->manager->validate(''));
+
+            $reflectedProperty = $reflectedManager->getProperty('checkMx');
+            $reflectedProperty->setAccessible(true);
+            $reflectedProperty->setValue($this->manager, true);
+
+            $checkdnsrrResult = false;
+
+            $this->assertFalse($this->manager->validate('foo@bar.baz'));
+
+            $curlResult = json_encode([
+                'status' => 'passed',
+            ]);
+            $checkdnsrrResult = true;
+
+            $this->assertTrue($this->manager->validate('foo@gooddomain.tld'));
         }
 
         /**

@@ -22,6 +22,11 @@ class BulkEmailCheckerManager
     private $passOnError;
 
     /**
+     * @var bool
+     */
+    private $checkMx;
+
+    /**
      * @var string
      */
     private $apiKey;
@@ -50,6 +55,7 @@ class BulkEmailCheckerManager
     {
         $this->enabled = isset($config['enabled']) ? (bool) $config['enabled'] : false;
         $this->passOnError = isset($config['pass_on_error']) ? (bool) $config['pass_on_error'] : true;
+        $this->checkMx = isset($config['check_mx']) ? (bool) $config['check_mx'] : false;
         $this->apiKey = isset($config['api_key']) ? (string) $config['api_key'] : '';
         $this->apiUrl = isset($config['api_url']) ? (string) $config['api_url'] : '';
         $this->whitelistedDomains = isset($config['whitelisted_domains']) ? $config['whitelisted_domains'] : array();
@@ -71,17 +77,25 @@ class BulkEmailCheckerManager
         }
 
         $emailElements = explode('@', $email);
+        $domainName = array_pop($emailElements);
 
         if (
-            isset($emailElements[1])
-            && in_array($emailElements[1], $this->whitelistedDomains)
+            isset($domainName)
+            && in_array($domainName, $this->whitelistedDomains)
         ) {
             return true;
         }
 
         if (
-            isset($emailElements[1])
-            && in_array($emailElements[1], $this->blacklistedDomains)
+            isset($domainName)
+            && in_array($domainName, $this->blacklistedDomains)
+        ) {
+            return false;
+        }
+
+        if (
+            (true === $this->checkMx)
+            && (false === checkdnsrr($domainName, 'MX'))
         ) {
             return false;
         }

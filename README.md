@@ -42,8 +42,11 @@ Complete configuration (default values shown)
 exs_bulk_email_checker:
     enabled: true
     pass_on_error: true
+    check_mx: false
     api_key: 'YourApiKey'
     api_url: 'http://api-v4.bulkemailchecker2.com/?key=#api_key#&email=#email#'
+    whitelisted_domains: ['mycompany.tld']
+    blacklisted_domains: ['thebadguyscompany.tld']
 ```
 
 ## Usage

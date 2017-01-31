@@ -11,6 +11,9 @@ use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
  */
 class BulkEmailCheckerManager
 {
+    const RESPONSE_STATUS_PASSED = 'passed';
+    const RESPONSE_STATUS_UNKNOWN = 'unknown';
+
     /**
      * @var bool
      */
@@ -101,16 +104,22 @@ class BulkEmailCheckerManager
         }
 
         $ch = curl_init($this->getUrl($email));
+
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 15);
         curl_setopt($ch, CURLOPT_TIMEOUT, 15);
+
         $rawResponse = curl_exec($ch);
+
         curl_close($ch);
 
         $response = json_decode($rawResponse, true);
 
         if (isset($response['status'])) {
-            return ('passed' === strtolower($response['status']));
+            return in_array(
+                strtolower($response['status']),
+                [self::RESPONSE_STATUS_PASSED, self::RESPONSE_STATUS_UNKNOWN]
+            );
         }
 
         if (isset($response['error'])) {

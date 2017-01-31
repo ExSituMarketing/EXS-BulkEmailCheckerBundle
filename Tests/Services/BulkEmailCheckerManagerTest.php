@@ -89,6 +89,12 @@ namespace EXS\BulkEmailCheckerBundle\Tests\Services {
             $this->assertTrue($this->manager->validate('foo@bar.baz'));
 
             $curlResult = json_encode([
+                'status' => 'unknown',
+            ]);
+
+            $this->assertTrue($this->manager->validate('foo@bar.baz'));
+
+            $curlResult = json_encode([
                 'status' => 'failed',
             ]);
 

@@ -56,11 +56,11 @@ class BulkEmailCheckerManager
      */
     public function __construct(array $config)
     {
-        $this->enabled = isset($config['enabled']) ? (bool) $config['enabled'] : false;
-        $this->passOnError = isset($config['pass_on_error']) ? (bool) $config['pass_on_error'] : true;
-        $this->checkMx = isset($config['check_mx']) ? (bool) $config['check_mx'] : false;
-        $this->apiKey = isset($config['api_key']) ? (string) $config['api_key'] : '';
-        $this->apiUrl = isset($config['api_url']) ? (string) $config['api_url'] : '';
+        $this->enabled = isset($config['enabled']) ? (bool)$config['enabled'] : false;
+        $this->passOnError = isset($config['pass_on_error']) ? (bool)$config['pass_on_error'] : true;
+        $this->checkMx = isset($config['check_mx']) ? (bool)$config['check_mx'] : false;
+        $this->apiKey = isset($config['api_key']) ? (string)$config['api_key'] : '';
+        $this->apiUrl = isset($config['api_url']) ? (string)$config['api_url'] : '';
         $this->whitelistedDomains = isset($config['whitelisted_domains']) ? $config['whitelisted_domains'] : array();
         $this->blacklistedDomains = isset($config['blacklisted_domains']) ? $config['blacklisted_domains'] : array();
     }

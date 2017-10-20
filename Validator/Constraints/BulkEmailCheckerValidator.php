@@ -33,7 +33,10 @@ class BulkEmailCheckerValidator extends ConstraintValidator
      */
     public function validate($value, Constraint $constraint)
     {
-        if (false === $this->bulkEmailCheckerManager->validate($value)) {
+        if (
+            (false === $this->bulkEmailCheckerManager->validate($value))
+            && ($constraint instanceof BulkEmailChecker)
+        ) {
             $this
                 ->context
                 ->buildViolation($constraint->message)

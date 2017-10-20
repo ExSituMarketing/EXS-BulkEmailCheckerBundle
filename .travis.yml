@@ -25,3 +25,4 @@ install: composer install --prefer-dist --no-interaction
 script:
     - bin/phpunit -c . --coverage-text
     - bin/php-cs-fixer fix . --config=.php_cs.dist --dry-run --verbose --path-mode=intersection
+    - bin/phpstan analyse Services --level=7

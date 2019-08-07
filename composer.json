@@ -14,7 +14,7 @@
         }
     ],
     "require": {
-        "php": "~5.4|~7.0",
+        "php": ">=7.0",
         "symfony/framework-bundle": "^3.4",
         "symfony/validator": "^3.4"
     },

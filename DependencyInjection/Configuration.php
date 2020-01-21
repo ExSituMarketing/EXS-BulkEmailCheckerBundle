@@ -17,8 +17,8 @@ class Configuration implements ConfigurationInterface
      */
     public function getConfigTreeBuilder()
     {
-        $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('exs_bulk_email_checker');
+        $treeBuilder = new TreeBuilder('exs_bulk_email_checker');
+        $rootNode = method_exists(TreeBuilder::class, 'getRootNode') ? $treeBuilder->getRootNode() : $treeBuilder->root('exs_bulk_email_checker');
 
         $rootNode
             ->children()

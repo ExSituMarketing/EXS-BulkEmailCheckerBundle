@@ -67,7 +67,7 @@ namespace EXS\BulkEmailCheckerBundle\Tests\Services {
                 'enabled' => true,
                 'pass_on_error' => true,
                 'api_key' => 'Foo123Bar456',
-                'api_url' => 'http://api-v4.bulkemailchecker2.com/?key=#api_key#&email=#email#',
+                'api_url' => 'https://api-v4.bulkemailchecker.com/?key=#api_key#&email=#email#',
                 'whitelisted_domains' => ['whitelisted.tld'],
                 'blacklisted_domains' => ['blacklisted.tld'],
             ]);
@@ -155,7 +155,7 @@ namespace EXS\BulkEmailCheckerBundle\Tests\Services {
             $method->setAccessible(true);
 
             $url = $method->invokeArgs($this->manager, ['foo@bar.baz']);
-            $this->assertEquals('http://api-v4.bulkemailchecker2.com/?key=Foo123Bar456&email=foo@bar.baz', $url);
+            $this->assertEquals('https://api-v4.bulkemailchecker.com/?key=Foo123Bar456&email=foo@bar.baz', $url);
 
             $reflectedManager = new \ReflectionClass($this->manager);
             $reflectedProperty = $reflectedManager->getProperty('apiUrl');
